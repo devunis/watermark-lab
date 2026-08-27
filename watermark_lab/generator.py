@@ -24,7 +24,7 @@ class WatermarkLogitsProcessor(LogitsProcessor):
         for row in range(batch_size):
             previous = int(input_ids[row, -1].item())
             allowed = greenlist(self.vocab_size, self.config.secret, previous,
-                                position=int(input_ids.shape[1]), ratio=self.config.greenlist_ratio,
+                                ratio=self.config.greenlist_ratio,
                                 hash_name=self.config.hash_name)
             scores[row, allowed] += self.config.delta
         return scores

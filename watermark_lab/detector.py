@@ -20,7 +20,6 @@ class WatermarkDetector:
                 token_count=vocab_size,
                 secret=self.config.secret,
                 previous_token_id=token_ids[index - 1],
-                position=index,
                 ratio=self.config.greenlist_ratio,
                 hash_name=self.config.hash_name,
             )
@@ -30,7 +29,7 @@ class WatermarkDetector:
 
     def detect_ids(self, token_ids: Sequence[int], vocab_size: int) -> DetectionResult:
         return score_signal(self.token_signal(token_ids, vocab_size), self.config.gamma,
-                            self.config.delta, self.config.min_tokens)
+                            self.config.z_threshold, self.config.min_tokens)
 
     def detect_text(self, text: str, tokenizer: Any) -> DetectionResult:
         token_ids = tokenizer.encode(text, add_special_tokens=False)
@@ -40,4 +39,5 @@ class WatermarkDetector:
     def local_scores(self, token_ids: Sequence[int], vocab_size: int, window: int = 50,
                      step: int = 25):
         return segment_scores(self.token_signal(token_ids, vocab_size), window, step,
-                              self.config.gamma, self.config.delta, self.config.min_tokens)
+                              self.config.gamma, self.config.z_threshold,
+                              self.config.min_tokens)

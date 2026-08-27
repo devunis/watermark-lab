@@ -1,10 +1,10 @@
-from watermark_lab.seeding import greenlist, seed_for_position
+from watermark_lab.seeding import greenlist, seed_for_token
 
 
 def test_seed_and_greenlist_are_deterministic():
-    assert seed_for_position("secret", 3, 4) == seed_for_position("secret", 3, 4)
-    assert greenlist(100, "secret", 3, 4) == greenlist(100, "secret", 3, 4)
-    assert greenlist(100, "secret", 3, 4) != greenlist(100, "other", 3, 4)
+    assert seed_for_token("secret", 3) == seed_for_token("secret", 3)
+    assert greenlist(100, "secret", 3) == greenlist(100, "secret", 3)
+    assert greenlist(100, "secret", 3) != greenlist(100, "other", 3)
 
 
 def test_greenlist_size_is_controlled_by_ratio():

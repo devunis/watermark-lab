@@ -61,7 +61,7 @@ curl -X POST http://127.0.0.1:8000/detect \
 
 ## Method notes
 
-At position `i`, a SHA-256-derived seed is created from the private secret, the previous token ID, and the position. That seed deterministically partitions the vocabulary into green and red candidates. The generator adds `delta` to green-list logits. The detector counts green observations and computes:
+At position `i`, a SHA-256-derived seed is created from the private secret and the previous token ID. That seed deterministically partitions the vocabulary into green and red candidates. The generator adds `delta` to green-list logits. The detector independently compares the resulting z-score with `z_threshold` and computes:
 
 ```text
 z = (green_count - gamma * n) / sqrt(n * gamma * (1 - gamma))
