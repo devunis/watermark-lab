@@ -13,6 +13,7 @@ authors = [{ name = "Watermark Lab contributors" }]
 dependencies = [
   "fastapi>=0.110,<1",
   "pydantic>=2,<3",
+  "uvicorn[standard]>=0.30,<1",
 ]
 
 [project.optional-dependencies]
@@ -31,6 +32,9 @@ watermark-lab = "watermark_lab.cli:main"
 
 [tool.setuptools.packages.find]
 include = ["watermark_lab*"]
+
+[tool.setuptools.package-data]
+watermark_lab = ["static/*.html", "static/*.css", "static/*.js"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

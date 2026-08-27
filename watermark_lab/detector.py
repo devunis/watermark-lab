@@ -33,7 +33,9 @@ class WatermarkDetector:
 
     def detect_text(self, text: str, tokenizer: Any) -> DetectionResult:
         token_ids = tokenizer.encode(text, add_special_tokens=False)
-        vocab_size = int(getattr(tokenizer, "vocab_size", len(tokenizer)))
+        vocab_size = getattr(tokenizer, "vocab_size", None)
+        if vocab_size is None:
+            vocab_size = len(tokenizer)
         return self.detect_ids(token_ids, vocab_size)
 
     def local_scores(self, token_ids: Sequence[int], vocab_size: int, window: int = 50,

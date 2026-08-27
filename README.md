@@ -12,6 +12,7 @@ This repository is intentionally scoped to watermark research on a scheme that y
 - `attacks`: transparent robustness tests for synonym replacement, sentence reordering, truncation, and mild noise.
 - `benchmark`: original-vs-edited z-score and detection-rate comparison.
 - `api`: FastAPI endpoints for health, generation, detection, and benchmarking.
+- `web UI`: browser console for generation, detection, and controlled durability tests.
 - `tests`: deterministic unit and API smoke tests.
 
 ## Quick start
@@ -42,6 +43,8 @@ Start the API:
 export WATERMARK_SECRET='use-a-private-random-secret'
 uvicorn watermark_lab.api:app --reload
 ```
+
+Then open `http://127.0.0.1:8000` for the web interface. The stress-test panel requires an explicit confirmation that the text uses a watermark you own or control. It previews controlled edits and before/after scores; it is not a third-party provenance-removal tool.
 
 The `/generate` endpoint downloads the selected Hugging Face model on first use. For a lightweight local smoke test, call `/health`; for actual detection and benchmarking, the tokenizer for `model_name` must be available locally or downloadable.
 

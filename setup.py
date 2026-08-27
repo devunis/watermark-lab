@@ -7,4 +7,6 @@ setup(
     name="watermark-lab",
     version="0.1.0",
     packages=find_packages(include=["watermark_lab", "watermark_lab.*"]),
+    include_package_data=True,
+    package_data={"watermark_lab": ["static/*"]},
 )
