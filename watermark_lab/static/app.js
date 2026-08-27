@@ -77,6 +77,22 @@ $("intensity").addEventListener("input", (event) => {
   $("intensityValue").textContent = `${event.target.value}%`;
 });
 
+$("attack").addEventListener("change", (event) => {
+  $("replacementField").classList.toggle("hidden", event.target.value !== "word_replace");
+});
+
+function replacementMap() {
+  return $("replacementPairs").value.split("\n").reduce((result, line) => {
+    const separator = line.includes("=") ? "=" : "→";
+    const index = line.indexOf(separator);
+    if (index < 1) return result;
+    const source = line.slice(0, index).trim();
+    const target = line.slice(index + separator.length).trim();
+    if (source && target) result[source] = target;
+    return result;
+  }, {});
+}
+
 function stressPayload() {
   const text = sharedText();
   if (!text) throw new Error("먼저 생성하거나 검사할 텍스트를 입력하세요.");
@@ -87,6 +103,8 @@ function stressPayload() {
     synonym_probability: intensity,
     noise_probability: intensity,
     truncation_fraction: Math.max(.2, 1 - intensity),
+    replacement_map: replacementMap(),
+    attack_seed: Number($("seed").value),
     authorized_self_test: $("authorized").checked,
   };
 }

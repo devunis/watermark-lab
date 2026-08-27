@@ -87,11 +87,18 @@
           <label class="field">
             <span>Attack simulation</span>
             <select id="attack">
+              <option value="word_replace">Selected word replacement</option>
               <option value="synonym">Synonym replacement</option>
               <option value="sentence_edit">Sentence reordering</option>
               <option value="truncation">Truncation</option>
               <option value="noise">Whitespace / typo noise</option>
             </select>
+          </label>
+          <label class="field" id="replacementField">
+            <span>Replacement pairs · 한 줄에 하나</span>
+            <textarea id="replacementPairs" class="pair-input" rows="4" placeholder="연구=실험&#10;중요한=핵심적인&#10;watermark=signal">연구=실험
+중요한=핵심적인
+watermark=signal</textarea>
           </label>
           <label class="field slider-field">
             <span>Intensity <b id="intensityValue">25%</b></span>

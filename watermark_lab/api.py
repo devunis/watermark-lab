@@ -1,13 +1,19 @@
 import os
 from pathlib import Path
-from typing import Any, Callable, Literal, Optional
+from typing import Any, Callable, Dict, Literal, Optional
 
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
-from .attacks import add_noise, reorder_sentences, replace_synonyms, truncate
+from .attacks import (
+    add_noise,
+    reorder_sentences,
+    replace_selected_words,
+    replace_synonyms,
+    truncate,
+)
 from .benchmark import run_benchmark
 from .config import WatermarkConfig
 from .detector import WatermarkDetector
@@ -37,8 +43,10 @@ class BenchmarkRequest(DetectRequest):
 
 
 class StressTestRequest(BenchmarkRequest):
-    attack: Literal["synonym", "sentence_edit", "truncation", "noise"]
+    attack: Literal["word_replace", "synonym", "sentence_edit", "truncation", "noise"]
     sentence_mode: Literal["reverse", "rotate"] = "reverse"
+    replacement_map: Dict[str, str] = Field(default_factory=dict, max_length=50)
+    attack_seed: int = 0
     authorized_self_test: bool = False
 
 
@@ -65,6 +73,16 @@ def create_app(
             raise HTTPException(status_code=503, detail=f"Tokenizer unavailable: {exc}")
 
     def apply_attack(request: StressTestRequest) -> str:
+        if request.attack == "word_replace":
+            try:
+                return replace_selected_words(
+                    request.text,
+                    request.replacement_map,
+                    request.synonym_probability,
+                    request.attack_seed,
+                )
+            except ValueError as exc:
+                raise HTTPException(status_code=400, detail=str(exc))
         if request.attack == "synonym":
             return replace_synonyms(request.text, request.synonym_probability)
         if request.attack == "sentence_edit":

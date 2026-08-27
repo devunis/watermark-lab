@@ -68,3 +68,22 @@ def test_stress_test_returns_transformed_text_and_scores():
     assert payload["scope"] == "self-owned-watermark-durability-test"
     assert payload["transformed_text"] != original
     assert "before" in payload and "after" in payload
+
+
+def test_stress_test_replaces_user_selected_words():
+    client = TestClient(
+        create_app(WatermarkConfig("test-secret"), tokenizer_loader=fake_tokenizer_loader)
+    )
+    response = client.post(
+        "/stress-test",
+        json={
+            "text": "중요한 연구 결과입니다.",
+            "model_name": "fake",
+            "attack": "word_replace",
+            "replacement_map": {"중요한": "핵심적인", "연구": "실험"},
+            "synonym_probability": 1,
+            "authorized_self_test": True,
+        },
+    )
+    assert response.status_code == 200
+    assert response.json()["transformed_text"] == "핵심적인 실험 결과입니다."

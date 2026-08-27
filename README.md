@@ -10,6 +10,7 @@ This repository is intentionally scoped to watermark research on a scheme that y
 - `detector`: token-level and local-window detection using the matching secret.
 - `scoring`: green fraction, z-score, one-sided p-value, confidence, and thresholding.
 - `attacks`: transparent robustness tests for synonym replacement, sentence reordering, truncation, and mild noise.
+- `selected word replacement`: user-provided Korean or English `source=target` pairs with a bounded application ratio.
 - `benchmark`: original-vs-edited z-score and detection-rate comparison.
 - `api`: FastAPI endpoints for health, generation, detection, and benchmarking.
 - `web UI`: browser console for generation, detection, and controlled durability tests.
